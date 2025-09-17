@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+stages: 
+  - stage: stage1
+    jobs:
+      - job: job1
+        steps:
+          
+          - script: python sample.py
+            displayName: "this is python file"
+          - task: CopyFiles@2
+            displayName: "Copy Python file to artifact staging"
+            inputs:
+              contents: "sample.py"
+              targetFolder: "$(Build.ArtifactStagingDirectory)"
+ 
+    # Publish artifact
+          - publish: $(Build.ArtifactStagingDirectory)
+            artifact: drop
+            displayName: 'Publish Artifact'
